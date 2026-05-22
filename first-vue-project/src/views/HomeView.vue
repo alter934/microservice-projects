@@ -97,7 +97,7 @@ h3 { margin: 10px 0; color: #2c3e50; font-size: 1.3rem; }
 .stock-status { margin-top: 15px; }
 .badge {
   padding: 6px 12px;
-  border-radius: 10px;
+  border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
   display: inline-block;
