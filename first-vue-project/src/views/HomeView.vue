@@ -11,8 +11,8 @@ onMounted(async () => {
   try {
     // 🚀 Mikroservis senfonisi başlıyor: İki bağımsız servise AYNI ANDA istek atıyoruz
     const [urunlerResponse, stoklarResponse] = await Promise.all([
-      axios.get('http://localhost:5001/api/urunler'), // Ürün Mikroservisi
-      axios.get('http://localhost:5002/api/stoklar')  // Stok Mikroservisi
+      axios.get('http://localhost:8000/api/urunler'), // Ürün Mikroservisi
+      axios.get('http://localhost:8000/api/stoklar')  // Stok Mikroservisi
     ])
 
     const gelenUrunler = urunlerResponse.data
