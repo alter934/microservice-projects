@@ -1,0 +1,4 @@
+FROM postgres:16-alpine
+
+# Yerelimizdeki init.sql dosyasını doğrudan imajın kalbine mühürlüyoruz
+COPY ./init.sql /docker-entrypoint-initdb.d/init.sql

@@ -1,0 +1,25 @@
+# Bağımlılıklar (Asla GitHub'a gitmemeli)
+node_modules/
+.pnpm-store/
+.yarn/
+
+# Docker ve Veritabanı Kalıntıları
+postgres_data_klasoru/
+.local_postgres/
+
+# Mac OS Yerel Dosyaları
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Çevre Değişkenleri ve Gizli Dosyalar (İleride .env kullanırsanız)
+.env
+.env.local
+.env.*.local
+
+# Log Dosyaları
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
