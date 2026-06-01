@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "LruB/2x4SQQ=",
+  "success": true,
+  "projectFilePath": "/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/StockApi/StockApi.csproj",
+  "expectedPackageFiles": [
+    "/Users/nuriaycan/.nuget/packages/microsoft.aspnetcore.openapi/10.0.8/microsoft.aspnetcore.openapi.10.0.8.nupkg.sha512",
+    "/Users/nuriaycan/.nuget/packages/microsoft.openapi/2.0.0/microsoft.openapi.2.0.0.nupkg.sha512",
+    "/Users/nuriaycan/.nuget/packages/npgsql/10.0.3/npgsql.10.0.3.nupkg.sha512",
+    "/Users/nuriaycan/.nuget/packages/microsoft.netcore.app.host.linux-musl-arm64/10.0.8/microsoft.netcore.app.host.linux-musl-arm64.10.0.8.nupkg.sha512"
+  ],
+  "logs": []
+}

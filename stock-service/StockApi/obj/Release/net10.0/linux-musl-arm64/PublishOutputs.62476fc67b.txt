@@ -1,0 +1,10 @@
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/publish_output/StockApi
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/publish_output/appsettings.Development.json
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/publish_output/appsettings.json
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/publish_output/StockApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/publish_output/StockApi.deps.json
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/publish_output/StockApi.runtimeconfig.json
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/publish_output/StockApi.pdb
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/publish_output/Microsoft.AspNetCore.OpenApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/publish_output/Microsoft.OpenApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/publish_output/Npgsql.dll

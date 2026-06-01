@@ -1,13 +1,10 @@
-FROM node:20-alpine
-
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
 WORKDIR /app
 
-COPY package*.json ./
+# Dockerignore engeline takılmayan tertemiz net_out klasörünü kopyalıyoruz
+COPY ./net_out .
 
-RUN npm install && npm install -g nodemon
+ENV ASPNETCORE_URLS=http://+:5002
 
-COPY . .
-
-EXPOSE 5002
-
-CMD ["nodemon", "server.js"]
+# ls -R çıktımızda gördüğümüz tam dosya adı (Büyük/küçük harfe dikkat)
+ENTRYPOINT ["dotnet", "StockApi.dll"]
