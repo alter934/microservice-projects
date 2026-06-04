@@ -2,9 +2,13 @@
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/appsettings.Development.json
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/appsettings.json
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/StockApi.dll
-/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/StockApi.deps.json
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/StockApi.runtimeconfig.json
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/StockApi.pdb
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/Microsoft.AspNetCore.OpenApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/Microsoft.EntityFrameworkCore.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/Microsoft.EntityFrameworkCore.Abstractions.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/Microsoft.EntityFrameworkCore.Relational.dll
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/Microsoft.OpenApi.dll
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/Npgsql.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/Npgsql.EntityFrameworkCore.PostgreSQL.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/StockApi.deps.json
