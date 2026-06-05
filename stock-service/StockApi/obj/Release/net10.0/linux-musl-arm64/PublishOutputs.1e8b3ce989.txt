@@ -4,6 +4,9 @@
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/StockApi.dll
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/StockApi.runtimeconfig.json
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/StockApi.pdb
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/FluentValidation.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/FluentValidation.AspNetCore.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/FluentValidation.DependencyInjectionExtensions.dll
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/Microsoft.AspNetCore.OpenApi.dll
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/Microsoft.EntityFrameworkCore.dll
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/net_out/Microsoft.EntityFrameworkCore.Abstractions.dll

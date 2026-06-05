@@ -28,7 +28,7 @@ onMounted(async () => {
     })
 
   } catch (error) {
-    console.error('Mikroservislerden veri çekilirken hata oluştu:', error)
+    //console.error('Mikroservislerden veri çekilirken hata oluştu:', error)
     hataMesaji.value = 'Mikroservis köprüleri kurulamadı! Servisleri kontrol edin.'
   } finally {
     yukleniyor.value = false

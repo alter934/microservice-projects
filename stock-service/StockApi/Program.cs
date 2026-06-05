@@ -1,4 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using StockApi.Dtos;
+using StockApi.Middlewares;
+using FluentValidation.AspNetCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,10 +36,20 @@ if (!string.IsNullOrEmpty(dbHost))
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-builder.Services.AddControllers(); // Controller servislerini IoC konteynerine kaydediyoruz
+// 1. Standart Controller servisini yalın olarak kaydediyoruz
+builder.Services.AddControllers();
+
+// 2. 🚀 MODERN YÖNTEM: Validator sınıflarımızı Dependency Injection (DI) sistemine otomatik kaydet
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateStockDtoValidator>();
+
+// 3. 🚀 MODERN YÖNTEM: Gelen istekleri Controller seviyesinde otomatik doğrulamaya (Auto-Validation) tabi tut
+builder.Services.AddFluentValidationAutoValidation();
 
 var app = builder.Build();
 app.UseCors("AllowAll");
+
+// 🚀 [16. Exception Handling]: Global Hata Yönetim Zırhını en başa takıyoruz!
+app.UseMiddleware<ExceptionMiddleware>();
 
 
 // 🚀 Özel Middleware: İstek Süresi Ölçer ve Loglar

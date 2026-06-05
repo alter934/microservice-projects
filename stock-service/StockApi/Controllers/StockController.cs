@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StockApi.Dtos;
 
 namespace StockApi.Controllers
 {
@@ -14,6 +15,36 @@ namespace StockApi.Controllers
         public StokController(AppDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        [HttpPost("guncelle")] // 🚀 POST api/stoklar/guncelle
+        public async Task<IActionResult> UpdateStok([FromBody] UpdateStockDto dto)
+        {
+            // .NET Core ve FluentValidation arkada el sıkışır. 
+            // Eğer kurallara uymayan bir veri gelirse, ModelState otomatik olarak geçersiz (Invalid) olur.
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); // Hataları 400 Bad Request ile frontend'e zarifçe dön
+            }
+
+            Console.WriteLine($"[STOK GÜNCELLE] Ürün: {dto.UrunId} -> Yeni Stok: {dto.StokMiktari}");
+
+            var stock = await _dbContext.Stocks.FirstOrDefaultAsync(s => s.UrunId == dto.UrunId);
+            
+            if (stock == null)
+            {
+                // Eğer veritabanında bu ürün yoksa yeni satır oluşturalım
+                stock = new Stock { UrunId = dto.UrunId, StokMiktari = dto.StokMiktari };
+                await _dbContext.Stocks.AddAsync(stock);
+            }
+            else
+            {
+                // Varsa miktarını güncelleyelim
+                stock.StokMiktari = dto.StokMiktari;
+            }
+
+            await _dbContext.SaveChangesAsync();
+            return Ok(new { Message = "Stok başarıyla güncellendi." });
         }
 
         [HttpGet] // 🚀 GET api/stoklar isteği geldiğinde bu metot tetiklenir
@@ -36,5 +67,7 @@ namespace StockApi.Controllers
                 return Problem("Veritabanı bağlantı hatası.");
             }
         }
+
+        
     }
 }

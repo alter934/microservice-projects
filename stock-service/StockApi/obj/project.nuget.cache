@@ -1,9 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "bvNA1Nio1MA=",
+  "dgSpecHash": "8VAKd+5QWVQ=",
   "success": true,
   "projectFilePath": "/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/StockApi/StockApi.csproj",
   "expectedPackageFiles": [
+    "/Users/nuriaycan/.nuget/packages/fluentvalidation/12.1.1/fluentvalidation.12.1.1.nupkg.sha512",
+    "/Users/nuriaycan/.nuget/packages/fluentvalidation.aspnetcore/11.3.1/fluentvalidation.aspnetcore.11.3.1.nupkg.sha512",
+    "/Users/nuriaycan/.nuget/packages/fluentvalidation.dependencyinjectionextensions/12.1.1/fluentvalidation.dependencyinjectionextensions.12.1.1.nupkg.sha512",
     "/Users/nuriaycan/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/nuriaycan/.nuget/packages/microsoft.aspnetcore.openapi/10.0.8/microsoft.aspnetcore.openapi.10.0.8.nupkg.sha512",
     "/Users/nuriaycan/.nuget/packages/microsoft.build.framework/18.0.2/microsoft.build.framework.18.0.2.nupkg.sha512",
