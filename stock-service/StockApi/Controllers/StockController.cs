@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using StockApi.Dtos;
 
 namespace StockApi.Controllers
@@ -9,12 +10,16 @@ namespace StockApi.Controllers
     public class StokController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
+        private readonly IMemoryCache _memoryCache;
 
         // 🚀 [02. Dependency Injection]: .NET Core, AppDbContext bağımlılığını 
         // constructor üzerinden bu sınıfa otomatik enjekte eder.
-        public StokController(AppDbContext dbContext)
+
+        // .NET Core, hem DbContext'i hem de IMemoryCache'i buraya otomatik enjekte eder
+        public StokController(AppDbContext dbContext, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
+            _memoryCache = memoryCache;
         }
 
         [HttpPost("guncelle")] // 🚀 POST api/stoklar/guncelle
@@ -44,28 +49,40 @@ namespace StockApi.Controllers
             }
 
             await _dbContext.SaveChangesAsync();
+
+            // 🚀 KRİTİK ADIM: Stok güncellendiği için RAM'deki eski önbelleği (Cache Eviction) siliyoruz!
+            // Böylece sonraki ilk GET isteği güncel veriyi veritabanından zorunlu olarak çeker.
+            _memoryCache.Remove("tum_stoklar");
+            
             return Ok(new { Message = "Stok başarıyla güncellendi." });
         }
 
         [HttpGet] // 🚀 GET api/stoklar isteği geldiğinde bu metot tetiklenir
         public async Task<IActionResult> GetStoklar()
         {
-            Console.WriteLine(".NET Controller: Stok listesi EF Core ile çekiliyor...");
-            
-            try
+           string cacheKey = "tum_stoklar";
+
+            // 🚀 Önce RAM belleğe bakıyoruz, veri orada var mı?
+            if (!_memoryCache.TryGetValue(cacheKey, out Dictionary<int, int>? stokMap))
             {
+                Console.WriteLine("⚠️ [CACHE MISS] Veri RAM'de yok! Veritabanına gidiliyor...");
+
+                // RAM'de yoksa veritabanından çekiyoruz
                 var stocksList = await _dbContext.Stocks.ToListAsync();
+                stokMap = stocksList.ToDictionary(s => s.UrunId, s => s.StokMiktari);
 
-                // Ön yüzün beklediği { 1: 15, 2: 42 } formatına (int key, int value) dönüştürüyoruz
-                var stokMap = stocksList.ToDictionary(s => s.UrunId, s => s.StokMiktari);
+                // Veritabanından aldığımız veriyi 1 dakikalığına RAM'e mühürlüyoruz
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(1)); // 1 dakika sonra cache'i patlat
 
-                return Ok(stokMap); // 200 OK Durumu ile JSON verisini dön
+                _memoryCache.Set(cacheKey, stokMap, cacheOptions);
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($".NET Controller Hatası: {ex.Message}");
-                return Problem("Veritabanı bağlantı hatası.");
+                Console.WriteLine("⚡ [CACHE HIT] Harika! Veri doğrudan RAM bellekten şimşek hızında çekildi.");
             }
+
+            return Ok(stokMap);
         }
 
         

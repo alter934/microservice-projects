@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using StockApi.Dtos;
 using StockApi.Middlewares;
+using StockApi.Services;
 using FluentValidation.AspNetCore;
 
 
@@ -38,6 +39,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // 1. Standart Controller servisini yalın olarak kaydediyoruz
 builder.Services.AddControllers();
+
+builder.Services.AddMemoryCache(); // 🚀 [18. Caching]: Bellek önbellekleme servisini IoC konteynerine ekliyoruz
+builder.Services.AddHostedService<StokRaporWorker>(); // 🚀 Arka plan işçisini .NET işletim sistemine zimmetliyoruz
 
 // 2. 🚀 MODERN YÖNTEM: Validator sınıflarımızı Dependency Injection (DI) sistemine otomatik kaydet
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateStockDtoValidator>();
