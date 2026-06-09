@@ -1,20 +1,11 @@
-# 1. Resmi Node.js hafif imajını taban alıyoruz
-FROM node:20-alpine
-
-# 2. Konteyner içinde projenin yaşayacağı klasörü oluşturuyoruz
+# .NET 10 çalışma zamanı (runtime) imajını kullanıyoruz
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
 WORKDIR /app
 
-# 3. Bağımlılık listelerini kopyalıyoruz
-COPY package*.json ./
+# Yerelde derlediğimiz net_out klasörünü konteynere kopyala
+COPY ./net_out .
 
-# Hem kütüphaneleri kuruyoruz hem de canlı izleme için nodemon ekliyoruz
-RUN npm install && npm install -g nodemon
+# Ürün servisinin konteyner içinde dinleyeceği port (Eski Node.js portuyla aynı tutuyoruz: 5001)
+ENV ASPNETCORE_URLS=http://+:5001
 
-# 5. Kalan tüm kaynak kodları (server.js vb.) kopyalıyoruz
-COPY . .
-
-# 6. Servisin çalışacağı portu dışarıya duyuruyoruz
-EXPOSE 5001
-
-# 7. Konteyner ayağa kalktığında çalışacak komut
-CMD ["nodemon", "server.js"]
+ENTRYPOINT ["dotnet", "ProductApi.dll"]

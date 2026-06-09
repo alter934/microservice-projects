@@ -1,0 +1,17 @@
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/ProductApi
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/appsettings.Development.json
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/appsettings.json
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/ProductApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/ProductApi.runtimeconfig.json
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/ProductApi.pdb
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/FluentValidation.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/FluentValidation.AspNetCore.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/FluentValidation.DependencyInjectionExtensions.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/Microsoft.AspNetCore.OpenApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/Microsoft.EntityFrameworkCore.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/Microsoft.EntityFrameworkCore.Abstractions.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/Microsoft.EntityFrameworkCore.Relational.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/Microsoft.OpenApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/Npgsql.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/Npgsql.EntityFrameworkCore.PostgreSQL.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/ProductApi.deps.json

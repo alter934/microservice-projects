@@ -35,7 +35,14 @@ if (!string.IsNullOrEmpty(dbHost))
 // 🚀 [02. Dependency Injection & 08. EF Core]: DbContext'i sisteme kaydediyoruz
 // .NET Core, veritabanı bağlantı havuzunu ve nesne ömrünü arka planda otomatik yönetecek.
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString, npgsqlOptions => 
+    {
+        // 🚀 Veritabanı açılana kadar veya anlık kopmalarda otomatik olarak yeniden denetir
+        npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5, 
+            maxRetryDelay: TimeSpan.FromSeconds(5), 
+            errorCodesToAdd: null);
+    }));
 
 // 1. Standart Controller servisini yalın olarak kaydediyoruz
 builder.Services.AddControllers();
@@ -51,6 +58,26 @@ builder.Services.AddFluentValidationAutoValidation();
 
 var app = builder.Build();
 app.UseCors("AllowAll");
+
+// 🚀 Uygulama ayağa kalkarken stock_db yoksa oluştur ve şemayı güncelle
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    try
+    {
+        Console.WriteLine(".NET Stok API: Veritabanı varlığı kontrol ediliyor...");
+        // Veritabanı sunucuda fiziksel olarak yoksa sıfırdan oluşturur
+        await db.Database.EnsureCreatedAsync(); 
+        
+        Console.WriteLine(".NET Stok API: Şema göçleri (Migrations) işleniyor...");
+        await db.Database.MigrateAsync();
+        Console.WriteLine(".NET Stok API: Veritabanı ve tablolar hazır!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($".NET Stok API Başlangıç Hatası: {ex.Message}");
+    }
+}
 
 // 🚀 [16. Exception Handling]: Global Hata Yönetim Zırhını en başa takıyoruz!
 app.UseMiddleware<ExceptionMiddleware>();

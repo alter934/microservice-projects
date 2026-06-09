@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import ProductManagement from './views/ProductManagement.vue' // Klasör yoluna dikkat et
 </script>
 
 <template>
@@ -15,9 +16,16 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>
+
+   
+
   </header>
 
   <RouterView />
+
+   <div id="app">
+    <ProductManagement />
+  </div>
 </template>
 
 <style scoped>

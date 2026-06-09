@@ -17,9 +17,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5001:5001"
-    volumes:
-      - ./Product Service:/app
-      - /app/node_modules
     environment:
       - DB_HOST=database
       - DB_USER=nuri
@@ -27,7 +24,8 @@ services:
       - DB_NAME=product_db
       - DB_PORT=5432
     depends_on:
-      - database
+       database:
+          condition: service_healthy
 
   # 📦 BACKEND 2: Stok Mikroservisimiz (Yeni Eklenen)
   stok-servisi:
@@ -43,7 +41,8 @@ services:
       - DB_NAME=stock_db
       - DB_PORT=5432
     depends_on:
-      - database
+       database:
+          condition: service_healthy
 
  # 🐘 VERİTABANI: Ortak PostgreSQL Konteynerimiz
   database:
@@ -56,7 +55,12 @@ services:
     environment:
       - POSTGRES_USER=nuri
       - POSTGRES_PASSWORD=aycan_secret
-      - POSTGRES_DB=product_db 
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nuri -d product_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     volumes:
       - pgdata_nihai:/var/lib/postgresql/data
 
