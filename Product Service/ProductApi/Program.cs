@@ -47,7 +47,7 @@ builder.Services.AddDbContext<ProductDbContext>(options =>
 builder.Services.AddHttpClient("StokServisClient", client =>
 {
     // Docker ağı içindeki servis adını ve portunu hedefliyoruz
-    client.BaseAddress = new Uri("http://stok-servisi:5002/");
+    client.BaseAddress = new Uri("http://localhost:5002/");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 

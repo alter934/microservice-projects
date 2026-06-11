@@ -77,6 +77,8 @@ import axios from 'axios'
 const PRODUCT_API_URL = 'http://localhost:8000/api/urunler'
 const STOCK_API_URL = 'http://localhost:8000/api/stoklar'
 
+
+
 const combinedProducts = ref([])
 const isLoading = ref(false)
 const route = useRoute()

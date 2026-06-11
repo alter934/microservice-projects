@@ -1,0 +1,17 @@
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/ProductApi
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/appsettings.Development.json
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/appsettings.json
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/ProductApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/ProductApi.runtimeconfig.json
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/ProductApi.pdb
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/FluentValidation.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/FluentValidation.AspNetCore.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/FluentValidation.DependencyInjectionExtensions.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/Microsoft.AspNetCore.OpenApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/Microsoft.EntityFrameworkCore.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/Microsoft.EntityFrameworkCore.Abstractions.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/Microsoft.EntityFrameworkCore.Relational.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/Microsoft.OpenApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/Npgsql.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/Npgsql.EntityFrameworkCore.PostgreSQL.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Debug/net10.0/linux-arm64/publish/ProductApi.deps.json

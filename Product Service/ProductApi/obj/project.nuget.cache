@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "y+MmSt+IgiM=",
+  "dgSpecHash": "7boEBw+9iTg=",
   "success": true,
   "projectFilePath": "/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/ProductApi.csproj",
   "expectedPackageFiles": [
@@ -34,8 +34,7 @@
     "/Users/nuriaycan/.nuget/packages/system.composition.convention/9.0.0/system.composition.convention.9.0.0.nupkg.sha512",
     "/Users/nuriaycan/.nuget/packages/system.composition.hosting/9.0.0/system.composition.hosting.9.0.0.nupkg.sha512",
     "/Users/nuriaycan/.nuget/packages/system.composition.runtime/9.0.0/system.composition.runtime.9.0.0.nupkg.sha512",
-    "/Users/nuriaycan/.nuget/packages/system.composition.typedparts/9.0.0/system.composition.typedparts.9.0.0.nupkg.sha512",
-    "/Users/nuriaycan/.nuget/packages/microsoft.netcore.app.host.linux-musl-arm64/10.0.8/microsoft.netcore.app.host.linux-musl-arm64.10.0.8.nupkg.sha512"
+    "/Users/nuriaycan/.nuget/packages/system.composition.typedparts/9.0.0/system.composition.typedparts.9.0.0.nupkg.sha512"
   ],
   "logs": []
 }

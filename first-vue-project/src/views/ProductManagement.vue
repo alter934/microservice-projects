@@ -112,6 +112,7 @@ import axios from 'axios'
 // API Kök Adresleri (Nginx Gateway üzerinden konuşuyoruz)
 const API_BASE = 'http://localhost:8000/api'
 
+
 // States
 const productsList = ref([])
 const selectedProductId = ref('')
