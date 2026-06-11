@@ -28,66 +28,122 @@ namespace ProductApi.Controllers
             return Ok(urunler);
         }
 
-        // 🚀 2. ÜRÜN TANIMINI GÜNCELLE: POST /api/urunler/guncelle
-        [HttpPost("guncelle")]
-public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDto dto)
-{
-    Console.WriteLine($"[ÜRÜN & STOK GÜNCELLE] ID: {dto.Id} süreci başladı.");
-
-    var strategy = _dbContext.Database.CreateExecutionStrategy();
-
-    try
-    {
-        // 🚀 BÜYÜK DÜZELTME: <IActionResult> ekleyerek asenkron lambdanın geriye ne döneceğini derleyiciye açıkça dikte ediyoruz
-        return await strategy.ExecuteAsync<IActionResult>(async () =>
+        // 🚀 1. YENİ ÜRÜN EKLE: POST /api/urunler/ekle
+        [HttpPost("ekle")]
+        public async Task<IActionResult> Ekle([FromBody] CreateProductDto dto)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            Console.WriteLine($"[ÜRÜN EKLE] Ürün: {dto.UrunAdi} süreci başladı.");
+
+            var strategy = _dbContext.Database.CreateExecutionStrategy();
 
             try
             {
-                var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == dto.Id);
-                if (product == null)
+                return await strategy.ExecuteAsync<IActionResult>(async () =>
                 {
-                    return NotFound(new { Message = "Güncellenmek istenen ürün bulunamadı." });
-                }
+                    using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-                // Ürün temel bilgilerini güncelle
-                product.UrunAdi = dto.UrunAdi;
-                product.Birim = dto.Birim;
-                product.Aciklama = dto.Aciklama;
-                await _dbContext.SaveChangesAsync();
+                    try
+                    {
+                        var urun = new Product
+                        {
+                            UrunKodu = dto.UrunKodu,
+                            UrunAdi = dto.UrunAdi,
+                            Birim = dto.Birim,
+                            Aciklama = dto.Aciklama
+                        };
 
-                // Arka planda Stok Servisine HTTP isteği çekiyoruz
-                var client = _httpClientFactory.CreateClient("StokServisClient");
-                var stokPaketi = new { urunId = dto.Id, stokMiktari = dto.StokMiktari };
-                var jsonIcerik = new StringContent(JsonSerializer.Serialize(stokPaketi), Encoding.UTF8, "application/json");
+                        await _dbContext.Products.AddAsync(urun);
+                        await _dbContext.SaveChangesAsync();
 
-                Console.WriteLine($"-> Arka planda Stok Servisine istek atılıyor... Ürün ID: {dto.Id}");
-                var stokYaniti = await client.PostAsync("api/stoklar/guncelle", jsonIcerik);
+                        var client = _httpClientFactory.CreateClient("StokServisClient");
+                        var stokPaketi = new { urunId = urun.Id, stokMiktari = dto.IlkStokMiktari };
+                        var jsonIcerik = new StringContent(JsonSerializer.Serialize(stokPaketi), Encoding.UTF8, "application/json");
 
-                if (!stokYaniti.IsSuccessStatusCode)
-                {
-                    throw new Exception("Stok servisi güncellemeyi reddetti! İşlem iptal ediliyor.");
-                }
+                        Console.WriteLine($"-> Stok servisine ilk stok oluşturma isteği gönderiliyor... Ürün ID: {urun.Id}");
+                        var stokYaniti = await client.PostAsync("api/stoklar/guncelle", jsonIcerik);
 
-                await transaction.CommitAsync();
-                Console.WriteLine("✅ [BAŞARILI] Ürün ve Stok veritabanları tam tutarlılıkla güncellendi.");
+                        if (!stokYaniti.IsSuccessStatusCode)
+                        {
+                            throw new Exception("Stok servisi ilk stok oluşturma işlemini reddetti! İşlem iptal ediliyor.");
+                        }
 
-                return Ok(new { Message = "Ürün bilgileri ve stok miktarı başarıyla senkronize güncellendi." });
+                        await transaction.CommitAsync();
+                        Console.WriteLine("✅ [BAŞARILI] Ürün ve stok kaydı tutarlı şekilde oluşturuldu.");
+
+                        return Ok(new { Message = "Ürün başarıyla eklendi ve ilk stok kaydı oluşturuldu.", ProductId = urun.Id });
+                    }
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        Console.WriteLine($"❌ [İPTAL EDİLDİ] Dağıtık işlem iç hatası: {ex.Message}");
+                        throw;
+                    }
+                });
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
-                Console.WriteLine($"❌ [İPTAL EDİLDİ] Dağıtık işlem iç hatası: {ex.Message}");
-                throw; // Stratejinin hatayı yönetebilmesi ve dış catch bloğuna paslaması için fırlatıyoruz
+                Console.WriteLine($"❌ [İPTAL EDİLDİ] Dağıtık işlem dış hatası: {ex.Message}");
+                return Problem($"Ürün ekleme sırasında bir hata oluştu: {ex.Message}");
             }
-        });
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"❌ [İPTAL EDİLDİ] Dağıtık işlem dış hatası: {ex.Message}");
-        return Problem($"Güncelleme sırasında bir hata oluştu: {ex.Message}");
-    }
-}
+        }
+
+        // 🚀 2. ÜRÜN TANIMINI GÜNCELLE: POST /api/urunler/guncelle
+        [HttpPost("guncelle")]
+        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDto dto)
+        {
+            Console.WriteLine($"[ÜRÜN & STOK GÜNCELLE] ID: {dto.Id} süreci başladı.");
+
+            var strategy = _dbContext.Database.CreateExecutionStrategy();
+
+            try
+            {
+                return await strategy.ExecuteAsync<IActionResult>(async () =>
+                {
+                    using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+                    try
+                    {
+                        var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == dto.Id);
+                        if (product == null)
+                        {
+                            return NotFound(new { Message = "Güncellenmek istenen ürün bulunamadı." });
+                        }
+
+                        product.UrunAdi = dto.UrunAdi;
+                        product.Birim = dto.Birim;
+                        product.Aciklama = dto.Aciklama;
+                        await _dbContext.SaveChangesAsync();
+
+                        var client = _httpClientFactory.CreateClient("StokServisClient");
+                        var stokPaketi = new { urunId = dto.Id, stokMiktari = dto.StokMiktari };
+                        var jsonIcerik = new StringContent(JsonSerializer.Serialize(stokPaketi), Encoding.UTF8, "application/json");
+
+                        Console.WriteLine($"-> Stok servisine güncelleme isteği gönderiliyor... Ürün ID: {dto.Id}");
+                        var stokYaniti = await client.PostAsync("api/stoklar/guncelle", jsonIcerik);
+
+                        if (!stokYaniti.IsSuccessStatusCode)
+                        {
+                            throw new Exception("Stok servisi güncellemeyi reddetti! İşlem iptal ediliyor.");
+                        }
+
+                        await transaction.CommitAsync();
+                        Console.WriteLine("✅ [BAŞARILI] Ürün ve stok veritabanları tam tutarlılıkla güncellendi.");
+
+                        return Ok(new { Message = "Ürün bilgileri ve stok miktarı başarıyla senkronize güncellendi." });
+                    }
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        Console.WriteLine($"❌ [İPTAL EDİLDİ] Dağıtık işlem iç hatası: {ex.Message}");
+                        throw;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ [İPTAL EDİLDİ] Dağıtık işlem dış hatası: {ex.Message}");
+                return Problem($"Güncelleme sırasında bir hata oluştu: {ex.Message}");
+            }
+        }
     }
 }

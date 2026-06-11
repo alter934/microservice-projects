@@ -22,6 +22,30 @@ namespace StockApi.Controllers
             _memoryCache = memoryCache;
         }
 
+        [HttpPost("ilk-stok")] // 🚀 POST api/stoklar/ilk-stok
+        public async Task<IActionResult> IlkStok([FromBody] UpdateStockDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Console.WriteLine($"[İLK STOK] Ürün: {dto.UrunId} -> Miktar: {dto.StokMiktari}");
+
+            var existingStock = await _dbContext.Stocks.FirstOrDefaultAsync(s => s.UrunId == dto.UrunId);
+
+            if (existingStock == null)
+            {
+                var stock = new Stock { UrunId = dto.UrunId, StokMiktari = dto.StokMiktari };
+                await _dbContext.Stocks.AddAsync(stock);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            _memoryCache.Remove("tum_stoklar");
+
+            return Ok(new { Message = "İlk stok kaydı başarıyla işlenmiştir." });
+        }
+
         [HttpPost("guncelle")] // 🚀 POST api/stoklar/guncelle
         public async Task<IActionResult> UpdateStok([FromBody] UpdateStockDto dto)
         {

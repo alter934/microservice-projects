@@ -121,3 +121,6 @@
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/StockApi/obj/Debug/net10.0/StockApi.pdb
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/StockApi/obj/Debug/net10.0/StockApi.genruntimeconfig.cache
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/StockApi/obj/Debug/net10.0/ref/StockApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/StockApi/bin/Debug/net10.0/FluentValidation.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/StockApi/bin/Debug/net10.0/FluentValidation.AspNetCore.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/stock-service/StockApi/bin/Debug/net10.0/FluentValidation.DependencyInjectionExtensions.dll

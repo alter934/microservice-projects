@@ -13,6 +13,45 @@
       <button class="btn btn-refresh" @click="fetchProducts" :disabled="isLoadingStock">🔄 Listeyi Yenile</button>
     </div>
 
+    <div class="mes-card form-card">
+      <h3>➕ Yeni Ürün Ekle</h3>
+
+      <div class="form-group">
+        <label>Ürün Kodu *</label>
+        <input type="text" v-model="insertForm.urunKodu" placeholder="Örn: PRD-1001" />
+      </div>
+
+      <div class="form-group">
+        <label>Ürün Adı *</label>
+        <input type="text" v-model="insertForm.urunAdi" placeholder="Örn: Paslanmaz Sac 2mm" />
+      </div>
+
+      <div class="form-group">
+        <label>Ölçü Birimi *</label>
+        <select v-model="insertForm.birim">
+          <option value="Adet">Adet</option>
+          <option value="KG">KG</option>
+          <option value="Plaka">Plaka</option>
+          <option value="Litre">Litre</option>
+          <option value="Metre">Metre</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>İlk Stok Miktarı *</label>
+        <input type="number" v-model.number="insertForm.ilkStokMiktari" placeholder="Örn: 100" />
+      </div>
+
+      <div class="form-group">
+        <label>Ürün Açıklaması</label>
+        <textarea v-model="insertForm.aciklama" rows="3" placeholder="Üretime yönelik teknik detaylar..."></textarea>
+      </div>
+
+      <button class="btn btn-save" @click="submitInsert" :disabled="isSubmitting">
+        {{ isSubmitting ? '➕ Ekleniyor...' : '➕ Ürünü Ekle' }}
+      </button>
+    </div>
+
     <div v-if="selectedProductId && form" class="mes-card form-card">
       <h3>✏️ Ürün Tanımı ve Stok Revizyonu (ID: {{ selectedProductId }})</h3>
       
@@ -90,6 +129,14 @@ const form = ref({
   stokMiktari: 0
 })
 
+const insertForm = ref({
+  urunKodu: '',
+  urunAdi: '',
+  birim: 'Adet',
+  ilkStokMiktari: 0,
+  aciklama: ''
+})
+
 // 🚀 1. Ürün listesini çek
 const fetchProducts = async () => {
   try {
@@ -142,6 +189,45 @@ const loadProductDetails = async () => {
     showStatus('⚠️ Ürünün stok bilgisi canlı olarak doğrulanamadı!', 'error')
   } finally {
     isLoadingStock.value = false
+  }
+}
+
+const submitInsert = async () => {
+  if (!insertForm.value.urunKodu || !insertForm.value.urunAdi || !insertForm.value.birim) {
+    showStatus('Lütfen ürün kodu, adı ve birimi doldurun.', 'error')
+    return
+  }
+
+  isSubmitting.value = true
+  statusMessage.value = ''
+
+  try {
+    const payload = {
+      urunKodu: insertForm.value.urunKodu,
+      urunAdi: insertForm.value.urunAdi,
+      birim: insertForm.value.birim,
+      aciklama: insertForm.value.aciklama,
+      ilkStokMiktari: insertForm.value.ilkStokMiktari
+    }
+
+    const response = await axios.post(`${API_BASE}/urunler/ekle`, payload)
+    showStatus(response.data.message || 'Ürün başarıyla eklendi!', 'success')
+
+    insertForm.value = {
+      urunKodu: '',
+      urunAdi: '',
+      birim: 'Adet',
+      ilkStokMiktari: 0,
+      aciklama: ''
+    }
+
+    await fetchProducts()
+    window.dispatchEvent(new CustomEvent('mes-data-updated'))
+  } catch (error) {
+    const errMsg = error.response?.data?.detail || error.response?.data?.message || 'Ürün ekleme başarısız oldu!'
+    showStatus(`❌ İşlem başarısız: ${errMsg}`, 'error')
+  } finally {
+    isSubmitting.value = false
   }
 }
 
