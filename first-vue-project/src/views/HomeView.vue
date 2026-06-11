@@ -57,6 +57,14 @@
               </span>
             </td>
             <td class="desc-text">{{ prod.aciklama || '---' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <button 
+                @click="confirmDelete(prod.id, prod.urunAdi)" 
+                class="text-red-600 hover:text-red-900 ml-4 font-semibold transition-colors duration-200"
+              >
+                🗑️ Sil
+              </button>
+            </td>
           </tr>
           <tr v-if="combinedProducts.length === 0">
             <td colspan="6" class="empty-state">Sistemde henüz tanımlı bir MES ürünü veya stok kaydı bulunamadı.</td>
@@ -68,7 +76,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted , onUnmounted, onActivated, watch} from 'vue'
+import { ref, computed, onMounted , onUnmounted, onActivated, watch, inject} from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 
@@ -87,6 +95,27 @@ const route = useRoute()
 const totalStockVolume = computed(() => {
   return combinedProducts.value.reduce((sum, item) => sum + (item.stokMiktari || 0), 0)
 })
+
+const confirmDelete = async (id, urunAdi) => {
+  // Operatör kazayla basmasın diye bir onay mekanizması
+  const confirmAction = confirm(`"${urunAdi}" isimli ürünü ve tüm stok geçmişini silmek istediğinize emin misiniz?`);
+  
+  if (confirmAction) {
+    try {
+      console.log(`🗑️ Ürün silme isteği gönderiliyor... ID: ${id}`);
+      const response = await axios.delete(`${PRODUCT_API_URL}/sil/${id}`);
+      
+      alert(response.data.message || 'Ürün başarıyla silindi!');
+      
+      // 🚀 KÜRESEL SİNYAL: Tabloyu anında güncellemesi için sinyal çakıyoruz!
+      window.dispatchEvent(new CustomEvent('mes-data-updated'));
+      
+    } catch (error) {
+      console.error('Silme işlemi sırasında hata:', error);
+      alert(error.response?.data?.message || 'Silme işlemi başarısız oldu.');
+    }
+  }
+}
 
 // 🚀 API Composition: İki farklı servisin verisini çek ve hafızada birleştir
 const fetchCombinedData = async () => {

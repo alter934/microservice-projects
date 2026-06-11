@@ -145,5 +145,48 @@ namespace ProductApi.Controllers
                 return Problem($"Güncelleme sırasında bir hata oluştu: {ex.Message}");
             }
         }
+
+        [HttpDelete("sil/{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var strategy = _dbContext.Database.CreateExecutionStrategy();
+
+            return await strategy.ExecuteAsync<IActionResult>(async () =>
+            {
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                try
+                {
+                    // 1. Ürünün varlığını kontrol et
+                    var product = await _dbContext.Products.FindAsync(id);
+                    if (product == null)
+                    {
+                        return NotFound(new { message = "Silinmek istenen ürün bulunamadı." });
+                    }
+
+                    // 2. Arka planda StockApi'ye bağlanıp o ürüne ait stokları sildir
+                    // (Hatırla: Debug ederken yerelde kaldığımız için localhost:5002 portunu kullanıyoruz)
+                    var client = _httpClientFactory.CreateClient("StokServisClient");
+                    var response = await client.DeleteAsync($"api/stoklar/sil/{id}");
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception("Stok servisi envanter kayıtlarını silmeyi reddetti. Silme işlemi iptal edildi.");
+                    }
+
+                    // 3. Stoklar başarıyla silindiyse şimdi ürünü kendi DB'mizden silebiliriz
+                    _dbContext.Products.Remove(product);
+                    await _dbContext.SaveChangesAsync();
+
+                    // Her iki tarafta da işlem okeyse transaction'ı mühürle
+                    await transaction.CommitAsync();
+                    return Ok(new { message = "Ürün ve bağlı tüm envanter kayıtları başarıyla silindi." });
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return BadRequest(new { message = $"Silme operasyonu başarısız: {ex.Message}" });
+                }
+            });
+        }
     }
 }

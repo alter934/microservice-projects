@@ -23,6 +23,7 @@ services:
       - DB_PASSWORD=aycan_secret
       - DB_NAME=product_db
       - DB_PORT=5432
+      - STOCK_API_URL=http://stok-servisi:5002/
     depends_on:
        database:
           condition: service_healthy

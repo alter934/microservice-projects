@@ -109,6 +109,21 @@ namespace StockApi.Controllers
             return Ok(stokMap);
         }
 
+        [HttpDelete("sil/{urunId}")]
+        public async Task<IActionResult> DeleteStocksByProductId(int urunId)
+        {
+            // Bu ürüne ait tüm stok satırlarını buluyoruz
+            var stokKayitlari = _dbContext.Stocks.Where(s => s.UrunId == urunId);
+            
+            if (stokKayitlari.Any())
+            {
+                _dbContext.Stocks.RemoveRange(stokKayitlari);
+                await _dbContext.SaveChangesAsync();
+            }
+            
+            return Ok(new { message = "Ürüne ait tüm envanter geçmişi temizlendi." });
+        }
+
         
     }
 }

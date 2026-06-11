@@ -46,8 +46,9 @@ builder.Services.AddDbContext<ProductDbContext>(options =>
 // 🚀 [Servisler Arası İletişim]: Stok servisiyle konuşacak merkezi HttpClient tanımı
 builder.Services.AddHttpClient("StokServisClient", client =>
 {
-    // Docker ağı içindeki servis adını ve portunu hedefliyoruz
-    client.BaseAddress = new Uri("http://localhost:5002/");
+    // 🚀 ÇÖZÜM: Docker'dan bir ENVIRONMENT değişkeni gelirse onu kullan, gelmezse (Local Debug ise) localhost'a git!
+    var stockApiUrl = Environment.GetEnvironmentVariable("STOCK_API_URL") ?? "http://localhost:5002/";
+    client.BaseAddress = new Uri(stockApiUrl);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
