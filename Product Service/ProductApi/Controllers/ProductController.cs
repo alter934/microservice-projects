@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using ProductApi.Dtos;
 using System.Text;
 using System.Text.Json;
+using RabbitMQ.Client;
+using Service.Contracts;
 
 namespace ProductApi.Controllers
 {
@@ -12,11 +14,13 @@ namespace ProductApi.Controllers
     {
         private readonly ProductDbContext _dbContext;
         private readonly IHttpClientFactory _httpClientFactory; // 🚀 HTTP Fabrikası enjeksiyonu
+        private readonly ConnectionFactory _connectionFactory;
 
-        public ProductController(ProductDbContext dbContext, IHttpClientFactory httpClientFactory)
+        public ProductController(ProductDbContext dbContext, IHttpClientFactory httpClientFactory, ConnectionFactory connectionFactory)
         {
             _dbContext = dbContext;
             _httpClientFactory = httpClientFactory;
+            _connectionFactory = connectionFactory;
         }
 
         // 🚀 1. TÜM ÜRÜNLERİ LİSTELE: GET /api/urunler
@@ -149,44 +153,47 @@ namespace ProductApi.Controllers
         [HttpDelete("sil/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var strategy = _dbContext.Database.CreateExecutionStrategy();
-
-            return await strategy.ExecuteAsync<IActionResult>(async () =>
+            // Artık iki veritabanını kilitleyen ağır bir transaction'a (BeginTransaction) ihtiyacımız KALMADI!
+            // Çünkü asenkron dünyada "Eventual Consistency" (Nihai Tutarlılık) felsefesi hakimdir.
+            
+            try
             {
-                using var transaction = await _dbContext.Database.BeginTransactionAsync();
-                try
+                // 1. Ürünü kendi DB'mizden kontrol et ve sil
+                var product = await _dbContext.Products.FindAsync(id);
+                if (product == null)
                 {
-                    // 1. Ürünün varlığını kontrol et
-                    var product = await _dbContext.Products.FindAsync(id);
-                    if (product == null)
-                    {
-                        return NotFound(new { message = "Silinmek istenen ürün bulunamadı." });
-                    }
-
-                    // 2. Arka planda StockApi'ye bağlanıp o ürüne ait stokları sildir
-                    // (Hatırla: Debug ederken yerelde kaldığımız için localhost:5002 portunu kullanıyoruz)
-                    var client = _httpClientFactory.CreateClient("StokServisClient");
-                    var response = await client.DeleteAsync($"api/stoklar/sil/{id}");
-
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        throw new Exception("Stok servisi envanter kayıtlarını silmeyi reddetti. Silme işlemi iptal edildi.");
-                    }
-
-                    // 3. Stoklar başarıyla silindiyse şimdi ürünü kendi DB'mizden silebiliriz
-                    _dbContext.Products.Remove(product);
-                    await _dbContext.SaveChangesAsync();
-
-                    // Her iki tarafta da işlem okeyse transaction'ı mühürle
-                    await transaction.CommitAsync();
-                    return Ok(new { message = "Ürün ve bağlı tüm envanter kayıtları başarıyla silindi." });
+                    return NotFound(new { message = "Silinmek istenen ürün bulunamadı." });
                 }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-                    return BadRequest(new { message = $"Silme operasyonu başarısız: {ex.Message}" });
-                }
-            });
+
+                _dbContext.Products.Remove(product);
+                await _dbContext.SaveChangesAsync();
+
+                // 🚀 MODERN ASENKRON PUBLISH
+                using var connection = await _connectionFactory.CreateConnectionAsync();
+                using var channel = await connection.CreateChannelAsync();
+
+                await channel.QueueDeclareAsync(queue: "product-deleted-queue",
+                                        durable: true,
+                                        exclusive: false,
+                                        autoDelete: false,
+                                        arguments: null);
+
+                var eventModel = new ProductDeletedEvent { Id = product.Id, UrunKodu = product.UrunKodu };
+                var jsonMessage = JsonSerializer.Serialize(eventModel);
+                var body = Encoding.UTF8.GetBytes(jsonMessage);
+
+                await channel.BasicPublishAsync(exchange: "",
+                                        routingKey: "product-deleted-queue",
+                                        mandatory: false,
+                                        basicProperties: new BasicProperties(),
+                                        body: body);
+
+                return Ok(new { message = "Ürün silindi, envanter güncelleme sinyali kuyruğa bırakıldı." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Hata oluştu: {ex.Message}" });
+            }
         }
     }
 }

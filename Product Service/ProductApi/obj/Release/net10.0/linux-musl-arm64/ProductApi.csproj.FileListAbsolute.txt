@@ -124,3 +124,4 @@
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/obj/Release/net10.0/linux-musl-arm64/ProductApi.pdb
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/obj/Release/net10.0/linux-musl-arm64/ProductApi.genruntimeconfig.cache
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/obj/Release/net10.0/linux-musl-arm64/ref/ProductApi.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/ProductApi/bin/Release/net10.0/linux-musl-arm64/RabbitMQ.Client.dll

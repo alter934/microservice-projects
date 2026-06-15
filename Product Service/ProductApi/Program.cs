@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using ProductApi;
 using ProductApi.Middlewares;
+using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,19 @@ builder.Services.AddHttpClient("StokServisClient", client =>
     client.BaseAddress = new Uri(stockApiUrl);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
+
+// RabbitMQ Bağlantı Fabrikasını (ConnectionFactory) Singleton olarak kaydediyoruz
+builder.Services.AddSingleton(sp =>
+{
+    var rabbitMqHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost";
+    return new ConnectionFactory() 
+    { 
+        HostName = rabbitMqHost,
+        UserName = "guest",
+        Password = "guest"
+    };
+});
+
 
 var app = builder.Build();
 

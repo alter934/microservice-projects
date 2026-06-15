@@ -14,4 +14,5 @@
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/Microsoft.OpenApi.dll
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/Npgsql.dll
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/Npgsql.EntityFrameworkCore.PostgreSQL.dll
+/Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/RabbitMQ.Client.dll
 /Users/nuriaycan/Desktop/microservice-projects/Vue Projeleri/Product Service/net_out/ProductApi.deps.json
